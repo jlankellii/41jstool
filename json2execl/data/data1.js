@@ -1,7 +1,7 @@
 module.exports = {
     index: {
         nav: {
-            home: '安全抽查',
+            home: '安全抽查2',
             rule: '安全抽查配置'
         },
         management: '视频抽查',
