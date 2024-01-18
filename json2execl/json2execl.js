@@ -1,49 +1,65 @@
-const fs = require('fs');
-const path = require('path');
-const xlsx = require('xlsx');
-const {promisify} = require('util');
-
-const readdir = promisify(fs.readdir);
-const readFile = promisify(fs.readFile);
-
-async function readFilesInDirectory(dir) {
-    const files = await readdir(dir);
-    const fileContents = await Promise.all(
-        files.map(async (file) => {
-            const filePath = path.join(dir, file);
-            const content = await readFile(filePath, 'utf8');
-            return extractValues(content);
-        })
-    );
-    return fileContents;
-}
-
-function extractValues(content) {
-    const regex = /['"]([^'"]+)['"]/g;
-    const matches = [];
-    let match;
-    while ((match = regex.exec(content)) !== null) {
-        matches.push(match[1]);
-    }
-    return matches;
-}
-
-function writeExcel(data) {
-    const workbook = xlsx.utils.book_new();
-    const sheet = xlsx.utils.aoa_to_sheet(data);
-    xlsx.utils.book_append_sheet(workbook, sheet, 'Sheet 1');
-    xlsx.writeFile(workbook, 'output.xlsx');
-}
-
-async function main() {
-    const directory = './data'; // 请确保目录存在
-    const fileContents = await readFilesInDirectory(directory);
-    const transposedData = transpose(fileContents);
-    writeExcel(transposedData);
-}
-
-function transpose(array) {
-    return array[0].map((_, colIndex) => array.map(row => row[colIndex]));
-}
-
-main();
+// const fs = require('fs');
+// const path = require('path');
+// const ExcelJS = require('exceljs');
+//
+// // 读取文件内容
+// function parseModule(filePath) {
+//     try {
+//         let fileContent = fs.readFileSync(filePath, 'utf-8');
+//         fileContent = fileContent.replace(/export default/g, 'module.exports =');
+//         return eval(fileContent);
+//     } catch (error) {
+//         console.error('Error parsing module:', error.message);
+//         return null;
+//     }
+// }
+//
+// function flattenJson(json, parentKey = '') {
+//     let result = {};
+//
+//     for (let key in json) {
+//         if (json.hasOwnProperty(key)) {
+//             const newKey = parentKey ? `${parentKey}.${key}` : key;
+//
+//             if (typeof json[key] === 'object' && !Array.isArray(json[key])) {
+//                 // 如果属性值是对象，则递归调用
+//                 result = {...result, ...flattenJson(json[key], newKey)};
+//             } else {
+//                 // 否则，添加属性路径和值到结果中
+//                 result[newKey] = json[key];
+//             }
+//         }
+//     }
+//
+//     return result;
+// }
+//
+//
+// const languageFolderPath = path.join(__dirname, 'language');
+// const referenceFolder = fs.readdirSync(path.join(languageFolderPath, fs.readdirSync(languageFolderPath)[0]));
+// const workbook = new ExcelJS.Workbook();
+//
+// fs.readdirSync(languageFolderPath).forEach(subFolder => {
+//     const subFolderPath = path.join(languageFolderPath, subFolder);
+//     if (fs.statSync(subFolderPath).isDirectory()) {
+//         referenceFolder.forEach(fileName => {
+//
+//             const filePath = path.join(subFolderPath, fileName);
+//             if (fs.existsSync(filePath)) {
+//
+//             }
+//
+//         });
+//     }
+// });
+//
+// referenceFolder.forEach(fileName => {
+//     const worksheet = workbook.addWorksheet(fileName);
+//     fs.readdirSync(languageFolderPath).forEach(subFolder => {
+//         const subFolderPath = path.join(languageFolderPath, subFolder);
+//         const filePath = path.join(subFolderPath, fileName);
+//
+//
+//     });
+//     worksheet.addRow(row);
+// });
