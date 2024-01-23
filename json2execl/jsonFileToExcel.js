@@ -92,7 +92,6 @@ function getAllValues(obj) {
             }
         }
     }
-    // console.log("6️⃣6️⃣6️⃣6️⃣6️⃣ ~ getAllValues ~ values:", values)
     return values;
 }
 
