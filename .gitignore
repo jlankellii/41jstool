@@ -33,3 +33,7 @@ tmp/
 temp/
 !DmJdbcDriver18.jar
 !kingbase8-8.6.0.jar
+
+node_modules
+package.json
+package-lock.json
